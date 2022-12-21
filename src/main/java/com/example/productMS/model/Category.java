@@ -16,6 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -44,6 +45,7 @@ public class Category {
 
 	@ManyToMany(mappedBy = "categories", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonIgnore
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	private Set<Product> products = new HashSet<>();
 
 	public void addProduct(Product product) {
