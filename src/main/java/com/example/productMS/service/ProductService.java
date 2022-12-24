@@ -7,13 +7,13 @@ import com.example.productMS.model.Product;
 
 public interface ProductService {
 
-	public Optional<Product> getProduct(int pid);
+    public Optional<Product> getProduct(int pid);
 
-	public List<Product> getAllProducts();
+    public List<Product> getAllProducts();
 
-	public String createProduct(Product product);
+    public Product createProduct(Product product);
 
-	public String editProduct(Product product);
+    public String editProduct(Product product);
 
-	public boolean deleteProduct(int pid);
+    public boolean deleteProduct(int pid);
 }

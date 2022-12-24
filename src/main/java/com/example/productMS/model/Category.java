@@ -11,8 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
+
 import javax.persistence.ManyToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,26 +30,21 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Category {
 
-	// how to use entity graph
-	// flyway implementation
-	// Junits for controller(Mock MVC), service layer(Mockito)
-	// integration-tests
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int cid;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	int cid;
+    @Column(name = "category_name")
+    String categoryName;
 
-	@Column(name = "category_name")
-	String categoryName;
+    @ManyToMany(mappedBy = "categories", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Set<Product> products = new HashSet<>();
 
-	@ManyToMany(mappedBy = "categories", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JsonIgnore
-	@JsonInclude(JsonInclude.Include.NON_EMPTY)
-	private Set<Product> products = new HashSet<>();
-
-	public void addProduct(Product product) {
-		products.add(product);
-		product.getCategories().add(this);
-	}
+    public void addProduct(Product product) {
+        products.add(product);
+        product.getCategories().add(this);
+    }
 
 }
