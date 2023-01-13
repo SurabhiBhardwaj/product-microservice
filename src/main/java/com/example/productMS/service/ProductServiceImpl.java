@@ -3,6 +3,7 @@ package com.example.productMS.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import com.example.productMS.exception.NoSuchProductExistsException;
 import com.example.productMS.exception.ProductAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,21 +23,22 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Optional<Product> getProduct(int pid) {
+        logger.info("ProductServiceImpl -- getProduct");
         return Optional.ofNullable(productRepos.findById(pid).orElseThrow(() -> new NoSuchProductExistsException(
                 "NO PRODUCT PRESENT WITH ID = " + pid)));
     }
 
     @Override
     public List<Product> getAllProducts() {
+        logger.info("ProductServiceImpl -- getAllProducts");
         List<Product> newList = productRepos.findAll().stream().collect(Collectors.toList());
         return newList;
     }
 
 
     public Product createProduct(Product product) {
-        Product existingProduct
-                = productRepos.findById(product.getPid())
-                .orElse(null);
+        logger.info("ProductServiceImpl -- createProduct");
+        Product existingProduct = productRepos.findById(product.getPid()).orElse(null);
         if (existingProduct == null) {
             return productRepos.save(product);
         } else
@@ -45,28 +47,27 @@ public class ProductServiceImpl implements ProductService {
 
 
     public String editProduct(Product product) {
-        Product existingProduct
-                = productRepos.findById(product.getPid())
-                .orElse(null);
+        logger.info("ProductServiceImpl -- editProduct");
+        Product existingProduct = productRepos.findById(product.getPid()).orElse(null);
         if (existingProduct == null)
-            throw new NoSuchProductExistsException(
-                    "No Such Product exists!!");
+            throw new NoSuchProductExistsException("No Such Product exists!!");
         else {
-            existingProduct.setPid(product.getPid());
-            existingProduct.setProductName(product.getProductName());
-            existingProduct.setPrice(product.getPrice());
-            existingProduct.setCategories(product.getCategories());
+            existingProduct = new Product().builder()
+                    .pid(product.getPid())
+                    .productName(product.getProductName())
+                    .price(product.getPrice())
+                    .categories(product.getCategories())
+                    .build();
+
             productRepos.save(existingProduct);
             return "Record updated Successfully";
         }
     }
 
     public boolean deleteProduct(int pid) {
+        logger.info("ProductServiceImpl -- deleteProduct");
         boolean success = false;
-        Product existingProduct
-                = productRepos.findById(pid)
-                .orElse(null);
-
+        Product existingProduct = productRepos.findById(pid).orElse(null);
         if (existingProduct == null) {
             throw new NoSuchProductExistsException("Sorry, Product cannot be deleted with id : " + pid);
         } else {

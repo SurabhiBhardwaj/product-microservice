@@ -1,5 +1,7 @@
 package com.example.productMS.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
@@ -10,7 +12,10 @@ import java.io.IOException;
 @Component
 public class TokenService {
 
+    private final static Logger logger = LoggerFactory.getLogger(TokenService.class);
+
     public String verifyToken(String token) throws RestClientException, IOException {
+        logger.info("TokenService -- verifyToken");
         String baseUrl = "http://localhost:8089/token/verify";
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = null;
@@ -19,7 +24,7 @@ public class TokenService {
         } catch (Exception e) {
             System.out.println(e);
         }
-        System.out.println(response.getBody());
+        logger.info(response.getBody());
         return response.getBody().toString();
     }
 

@@ -28,6 +28,7 @@ public class ProductController {
 
     @GetMapping("{pid}")
     public Optional<Product> getProduct(@PathVariable int pid, @RequestHeader String token) throws IOException {
+        logger.info("ProductController -- getProduct");
         if (tokenService.verifyToken(token).equals("VALID TOKEN")) {
             return productServiceImpl.getProduct(pid);
         } else {
@@ -38,14 +39,14 @@ public class ProductController {
 
     @GetMapping
     public List<Product> getAllProducts() {
-
+        logger.info("ProductController -- getAllProducts");
         return productServiceImpl.getAllProducts();
     }
 
 
     @PostMapping("/")
     public Product createProduct(@RequestBody Product product, @RequestHeader String token) throws IOException {
-
+        logger.info("ProductController -- createProduct");
         if (tokenService.verifyToken(token).equals("VALID TOKEN")) {
             return productServiceImpl.createProduct(product);
         } else {
@@ -55,6 +56,7 @@ public class ProductController {
 
     @PutMapping("/id/{pid}")
     public String editProduct(@PathVariable int pid, @RequestBody Product product, @RequestHeader String token) throws IOException {
+        logger.info("ProductController -- editProduct");
         if(tokenService.verifyToken(token).equals("VALID TOKEN")) {
             return productServiceImpl.editProduct(product);
         }else {
@@ -64,6 +66,7 @@ public class ProductController {
 
     @DeleteMapping("/id/{pid}")
     public boolean deleteProduct(@PathVariable int pid, @RequestHeader String token) throws IOException{
+        logger.info("ProductController -- deleteProduct");
         if(tokenService.verifyToken(token).equals("VALID TOKEN")) {
             return productServiceImpl.deleteProduct(pid);
         }else {
